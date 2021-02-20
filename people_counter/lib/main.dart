@@ -17,11 +17,11 @@ class _Home_State extends State<Home> {
     setState(() {
       _people += delta;
 
-      if(_people < 0){
+      if (_people < 0) {
         _infoText = "Upside Down World?!";
-      } else if(_people <= 10){
+      } else if (_people <= 10) {
         _infoText = "You May Come In!";
-      } else{
+      } else {
         _infoText = "Maximum Capacity!";
       }
     });
@@ -39,7 +39,7 @@ class _Home_State extends State<Home> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Pessoas: $_people",
+            Text("People: $_people",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
