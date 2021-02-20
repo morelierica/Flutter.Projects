@@ -21,8 +21,38 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.deepPurple[800],
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh), 
+            icon: Icon(Icons.refresh),
             onPressed: () {},
+          )
+        ],
+      ),
+      backgroundColor: Colors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Icon(Icons.person_outline,
+              size: 120.0, color: Colors.deepPurple[800]),
+          TextField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: "Weight (Kg)",
+              labelStyle: TextStyle(
+                color: Colors.deepPurple[800],
+              ),
+            ),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+          ),
+          TextField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: "Height (cm)",
+              labelStyle: TextStyle(
+                color: Colors.deepPurple[800],
+              ),
+            ),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
           )
         ],
       ),
