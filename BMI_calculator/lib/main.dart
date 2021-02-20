@@ -14,6 +14,18 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("BMI Calculator"),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple[800],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh), 
+            onPressed: () {},
+          )
+        ],
+      ),
+    );
   }
 }
