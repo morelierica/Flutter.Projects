@@ -15,13 +15,16 @@ class _HomeState extends State<Home> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String _infoText = "";
 
   void _resetFields() {
+    weightController.text = "";
+    heightController.text = "";
     setState(() {
-      weightController.text = "";
-      heightController.text = "";
       _infoText = "";
+      _formKey = GlobalKey<FormState>();
     });
   }
 
@@ -66,51 +69,68 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Icon(Icons.person_outline,
-                size: 120.0, color: Colors.deepPurple[800]),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: "Weight (Kg)",
-                  labelStyle: TextStyle(color: Colors.deepPurple[800])),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
-              controller: weightController,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: "Height (cm)",
-                  labelStyle: TextStyle(color: Colors.deepPurple[800])),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
-              controller: heightController,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
-              child: Container(
-                height: 50.0,
-                child: RaisedButton(
-                  onPressed: () {
-                    _calculate();
-                  },
-                  child: Text(
-                    "Calculate",
-                    style: TextStyle(color: Colors.white, fontSize: 25.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Icon(Icons.person_outline,
+                  size: 120.0, color: Colors.deepPurple[800]),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: "Weight (Kg)",
+                    labelStyle: TextStyle(color: Colors.deepPurple[800])),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+                controller: weightController,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "Insert your weight";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: "Height (cm)",
+                    labelStyle: TextStyle(color: Colors.deepPurple[800])),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+                controller: heightController,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "Insert your height";
+                  }
+                  return null;
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
+                child: Container(
+                  height: 50.0,
+                  child: RaisedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _calculate();
+                      }
+                    },
+                    child: Text(
+                      "Calculate",
+                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                    ),
+                    color: Colors.deepPurple[800],
                   ),
-                  color: Colors.deepPurple[800],
                 ),
               ),
-            ),
-            Text(
-              _infoText,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
-            )
-          ],
+              Text(
+                _infoText,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+              )
+            ],
+          ),
         ),
       ),
     );
