@@ -12,6 +12,41 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  String _infoText = "";
+
+  void _resetFields() {
+    setState(() {
+      weightController.text = "";
+      heightController.text = "";
+      _infoText = "";
+    });
+  }
+
+  void _calculate() {
+    setState(() {
+      double weight = double.parse(weightController.text);
+      double height = double.parse(heightController.text) / 100;
+      double bmi = weight / (height * height);
+
+      if (bmi < 18.5) {
+        _infoText = "Underweight (${bmi.toStringAsPrecision(3)})";
+      } else if (bmi >= 18.5 && bmi < 25) {
+        _infoText = "Normal Weight (${bmi.toStringAsPrecision(3)})";
+      } else if (bmi >= 25 && bmi < 30) {
+        _infoText = "Overweight (${bmi.toStringAsPrecision(3)})";
+      } else if (bmi >= 30 && bmi < 35) {
+        _infoText = "Obese Class I (${bmi.toStringAsPrecision(3)})";
+      } else if (bmi >= 35 && bmi < 40) {
+        _infoText = "Obese Class II (${bmi.toStringAsPrecision(3)})";
+      } else if (bmi > 40) {
+        _infoText = "Obese Class III (${bmi.toStringAsPrecision(3)})";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +57,9 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {},
+            onPressed: () {
+              _resetFields();
+            },
           )
         ],
       ),
@@ -41,6 +78,7 @@ class _HomeState extends State<Home> {
                   labelStyle: TextStyle(color: Colors.deepPurple[800])),
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+              controller: weightController,
             ),
             TextField(
               keyboardType: TextInputType.number,
@@ -49,13 +87,16 @@ class _HomeState extends State<Home> {
                   labelStyle: TextStyle(color: Colors.deepPurple[800])),
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
+              controller: heightController,
             ),
             Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
               child: Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _calculate();
+                  },
                   child: Text(
                     "Calculate",
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
@@ -65,7 +106,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Text(
-              "Info",
+              _infoText,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.deepPurple[800], fontSize: 25.0),
             )
