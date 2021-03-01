@@ -6,7 +6,19 @@ import 'dart:convert';
 const request = "https://api.hgbrasil.com/finance?format=json&key=6cf64cac";
 
 void main() async {
-  runApp(MaterialApp(home: Home()));
+  runApp(MaterialApp(
+    home: Home(),
+    theme: ThemeData(
+        hintColor: Colors.teal[700],
+        primaryColor: Colors.white,
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.teal[700])),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.teal[100])),
+          hintStyle: TextStyle(color: Colors.teal[700]),
+        )),
+  ));
 }
 
 Future<Map> getData() async {
@@ -20,6 +32,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  double dollar;
+  double euro;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +68,49 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   } else {
-                    return Container();
+                    dollar =
+                        snapshot.data["results"]["currencies"]["USD"]["buy"];
+                    euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
+
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Icon(Icons.monetization_on,
+                              size: 150.0, color: Colors.teal[700]),
+                          TextField(
+                            decoration: InputDecoration(
+                                labelText: "Reais",
+                                labelStyle: TextStyle(color: Colors.teal[700]),
+                                border: OutlineInputBorder(),
+                                prefixText: "R\$ "),
+                            style: TextStyle(
+                                color: Colors.teal[700], fontSize: 25.0),
+                          ),
+                          Divider(),
+                          TextField(
+                            decoration: InputDecoration(
+                                labelText: "Dollars",
+                                labelStyle: TextStyle(color: Colors.teal[700]),
+                                border: OutlineInputBorder(),
+                                prefixText: "US\$ "),
+                            style: TextStyle(
+                                color: Colors.teal[700], fontSize: 25.0),
+                          ),
+                          Divider(),
+                          TextField(
+                            decoration: InputDecoration(
+                                labelText: "Euros",
+                                labelStyle: TextStyle(color: Colors.teal[700]),
+                                border: OutlineInputBorder(),
+                                prefixText: "€ "),
+                            style: TextStyle(
+                                color: Colors.teal[700], fontSize: 25.0),
+                          )
+                        ],
+                      ),
+                    );
                   }
               }
             }));
