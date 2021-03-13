@@ -40,15 +40,42 @@ class _HomeState extends State<Home> {
   double euro;
 
   void _realChanged(String text) {
-    print(text);
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+
+    double real = double.parse(text);
+    dollarController.text = (real / dollar).toStringAsFixed(2);
+    euroController.text = (real / euro).toStringAsFixed(2);
   }
 
   void _dollarChanged(String text) {
-    print(text);
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+
+    double dollar = double.parse(text);
+    realController.text = (dollar * this.dollar).toStringAsFixed(2);
+    euroController.text = (dollar * this.dollar / euro).toStringAsFixed(2);
   }
 
   void _euroChanged(String text) {
-    print(text);
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dollarController.text = (euro * this.euro / dollar).toStringAsFixed(2);
+  }
+
+  void _clearAll() {
+    realController.text = "";
+    dollarController.text = "";
+    euroController.text = "";
   }
 
   @override
@@ -59,6 +86,14 @@ class _HomeState extends State<Home> {
           title: Text("\$ Currency Converter \$"),
           backgroundColor: Colors.teal[700],
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                _clearAll();
+              },
+            )
+          ],
         ),
         body: FutureBuilder<Map>(
             future: getData(),
@@ -98,7 +133,8 @@ class _HomeState extends State<Home> {
                           buildTextField(
                               "Reais", "R\$ ", realController, _realChanged),
                           Divider(),
-                          buildTextField("Dollars", "US\$ ", dollarController, _dollarChanged),
+                          buildTextField("Dollars", "US\$ ", dollarController,
+                              _dollarChanged),
                           Divider(),
                           buildTextField(
                               "Euros", "€ ", euroController, _euroChanged),
@@ -122,6 +158,6 @@ Widget buildTextField(String label, String prefix,
         prefixText: prefix),
     style: TextStyle(color: Colors.teal[700], fontSize: 25.0),
     onChanged: onChanged,
-    keyboardType: TextInputType.number,
+    keyboardType: TextInputType.numberWithOptions(decimal: true),
   );
 }
