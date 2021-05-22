@@ -20,6 +20,8 @@ class _HomeState extends State<Home> {
   final _toDoController = TextEditingController();
 
   List _toDoList = [];
+  Map<String, dynamic> _lastRemoved;
+  int _lastRemovedPos;
 
   @override
   void initState() {
@@ -86,16 +88,55 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildItem(context, index) {
-    return CheckboxListTile(
-      title: Text(_toDoList[index]["title"]),
-      value: _toDoList[index]["ok"],
-      secondary: CircleAvatar(
-        child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
+    return Dismissible(
+      key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.9, 0.0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        ),
       ),
-      onChanged: (c) {
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_toDoList[index]["title"]),
+        value: _toDoList[index]["ok"],
+        secondary: CircleAvatar(
+          child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
+        ),
+        onChanged: (c) {
+          setState(() {
+            _toDoList[index]["ok"] = c;
+            _saveData();
+          });
+        },
+      ),
+      onDismissed: (direction) {
         setState(() {
-          _toDoList[index]["ok"] = c;
+          _lastRemoved = Map.from(_toDoList[index]);
+          _lastRemovedPos = index;
+          _toDoList.removeAt(index);
+
           _saveData();
+
+          final snack = SnackBar(
+            content: Text("Task \"${_lastRemoved["title"]}\" removed"),
+            action: SnackBarAction(
+              label: "Undo",
+              onPressed: () {
+                setState(() {
+                  _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                  _saveData();
+                });
+              },
+            ),
+            duration: Duration(seconds: 3),
+          );
+
+          Scaffold.of(context).showSnackBar(snack);
         });
       },
     );
